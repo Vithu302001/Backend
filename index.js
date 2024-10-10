@@ -16,16 +16,8 @@ const stripeRoutes = require("./stripeRoutes.js");
 const twilio = require("./twilio.js");
 const stats = require("./stats.js");
 
-import cors from "cors";
-const corsOrigin = {
-  origin: "http://localhost:5173", //or whatever port your frontend is using
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-
 //middleware
-// app.use(cors());
-app.use(cors(corsOrigin));
+app.use(cors());
 app.use(express.json());
 
 //ROUTES//
