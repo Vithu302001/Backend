@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("./db.js");
 const router = express.Router();
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const getSellerStripeId = async (sellerId) => {
@@ -19,6 +19,36 @@ const getSellerStripeId = async (sellerId) => {
     throw error;
   }
 };
+
+router.post("/create-checkout-session", async (req, res) => {
+  const { amount } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Total Payment",
+            },
+            unit_amount: amount,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: "https://10.10.0.103:8081/payment-success",
+      cancel_url: "https://10.10.0.103:8081/payment-failure",
+    });
+
+    res.json({ id: session.id });
+  } catch (error) {
+    console.error("Error creating checkout session:", error);
+    res.status(500).send("Failed to create checkout session");
+  }
+});
 
 // Create a connected account for sellers
 router.post("/create-connected-account", async (req, res) => {
