@@ -25,6 +25,8 @@ const corsConfig = {
 app.use(cors(corsConfig));
 app.use(express.json());
 
+// Handle preflight requests
+// app.options("*", cors());
 //ROUTES//
 
 app.use("/", users);
