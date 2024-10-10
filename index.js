@@ -17,9 +17,19 @@ const twilio = require("./twilio.js");
 const stats = require("./stats.js");
 
 //middleware
-app.use(cors());
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',  // Allow your frontend origin
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
 
+// Handle preflight requests
+app.options('*', cors());
 //ROUTES//
 
 app.use("/", users);
