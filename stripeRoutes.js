@@ -20,21 +20,55 @@ const getSellerStripeId = async (sellerId) => {
   }
 };
 
-router.post("/create-payment-intent", async (req, res) => {
-  const { amount } = req.body;
+router.post('/create-payment-intent1', async (req, res) => {
+  const { user_id, cartItems } = req.body;
 
   try {
+    let totalAmount = 0;
+    const transferData = [];
+
+    // Calculate total amount and gather transfer information for sellers
+    for (const item of cartItems) {
+      const sellerStripeAccountId = await getSellerStripeId(item.seller_id); // Fetch seller's Stripe account ID
+
+      // Calculate item total and add to totalAmount
+      const itemTotal = Math.round(item.price * item.quantity * 100); // Amount in cents
+      totalAmount += itemTotal;
+
+      // Prepare transfer data for the seller
+      transferData.push({
+        amount: itemTotal, // Amount in cents
+        currency: "usd",
+        destination: sellerStripeAccountId, // Seller's connected Stripe account ID
+      });
+    }
+
+    // Create a PaymentIntent for the total amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount, // Amount in cents
+      amount: totalAmount, // Total amount in cents
       currency: "usd",
+      payment_method_types: ["card"],
     });
 
-    res.json({ clientSecret: paymentIntent.client_secret });
+    // Optionally create transfers for each seller
+    for (const transfer of transferData) {
+      await stripe.transfers.create({
+        ...transfer,
+        payment_intent: paymentIntent.id, // Associate transfer with the payment intent
+      });
+    }
+
+    // Send back the client secret to the frontend
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      transferData: transferData, // Optionally pass this data back to frontend for reference
+    });
   } catch (error) {
     console.error("Error creating payment intent:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Failed to create payment intent" });
   }
 });
+
 
 router.post("/create-checkout-session", async (req, res) => {
   const { amount } = req.body;
