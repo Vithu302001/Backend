@@ -20,6 +20,22 @@ const getSellerStripeId = async (sellerId) => {
   }
 };
 
+router.post("/create-payment-intent", async (req, res) => {
+  const { amount } = req.body;
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount, // Amount in cents
+      currency: "usd",
+    });
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 router.post("/create-checkout-session", async (req, res) => {
   const { amount } = req.body;
 
