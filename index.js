@@ -16,8 +16,13 @@ const stripeRoutes = require("./stripeRoutes.js");
 const twilio = require("./twilio.js");
 const stats = require("./stats.js");
 
+const corsConfig = {
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+};
 //middleware
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(express.json());
 
 //ROUTES//
