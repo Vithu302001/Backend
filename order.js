@@ -9,7 +9,7 @@ router.post("/orders", async (req, res) => {
   try {
     const count = await pool.query('SELECT COUNT(*) FROM "order"');
     const rid = parseInt(count.rows[0].count) + 1;
-    const order_id = `ordr${String(rid).padStart(4, "0")}`;
+    const order_id = `Ordt${String(rid).padStart(4, "0")}`;
 
     const result = await pool.query(
       'insert into "order" (order_id, buyer_id, item_id, order_date, is_confirmed, seller_id, order_quantity, sent_to_delivery) values ($1, $2, $3, $4, $5, $6, $7, $8) returning *',
