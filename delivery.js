@@ -8,7 +8,7 @@ router.get("/deliveries/:riderId", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT * FROM delivery_orders_view WHERE delivery_rider_id = $1 and is_delivered_to_buyer=$2",
+      "SELECT * FROM delivery_with_order_details WHERE delivery_rider_id = $1 and is_delivered_to_buyer=$2",
       [riderId, false]
     );
 
