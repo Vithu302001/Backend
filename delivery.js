@@ -98,26 +98,6 @@ router.put("/delivery-status/:deliveryId", async (req, res) => {
   }
 });
 
-// router.get("/delivery-by-orderID/:orderID", async (req, res) => {
-//   const { orderID } = req.params;
-
-//   try {
-//     const result = await pool.query(
-//       "SELECT * FROM delivery WHERE order_id = $1",
-//       [orderID]
-//     );
-
-//     if (result.rows.length === 0) {
-//       return res.status(404).send("No delivery found for this order");
-//     } else {
-//       return res.status(200).json(result.rows[0]);
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     return res.status(500).send("Server error");
-//   }
-// });
-
 router.get("/delivery-by-orderID/:orderID", async (req, res) => {
   const { orderID } = req.params;
 
@@ -128,26 +108,10 @@ router.get("/delivery-by-orderID/:orderID", async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No delivery found for this order" });
+      return res.status(404).send("No delivery found for this order");
+    } else {
+      return res.status(200).json(result.rows[0]);
     }
-
-    const delivery = result.rows[0];
-
-    // Check if the tracking hasn't started (e.g., all key fields are null)
-    const isTrackingNotStarted =
-      !delivery.delivered_to_sc &&
-      !delivery.is_delivered_to_buyer &&
-      !delivery.confirmation_date;
-
-    if (isTrackingNotStarted) {
-      return res
-        .status(200)
-        .json({ message: "Tracking not started", trackingStarted: false });
-    }
-
-    return res.status(200).json({ ...delivery, trackingStarted: true });
   } catch (e) {
     console.error(e);
     return res.status(500).send("Server error");
