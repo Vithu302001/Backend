@@ -20,7 +20,8 @@ const mail_service = require("./mail_service.js");
 const corsConfig = {
   origin: true,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 //middleware
 app.use(cors(corsConfig));
