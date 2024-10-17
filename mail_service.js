@@ -27,7 +27,7 @@ router.post("/send-confirmation", async (req, res) => {
         <p>Your order has been confirmed. Here are the details:</p>
         <ul>
           ${cartItems
-            .map((item) => `<li>${item.name} - ${item.quantity}</li>`)
+            .map((item) => `<li>${item.item_id} - ${item.quantity}</li>`)
             .join("")}
         </ul>
       `,
