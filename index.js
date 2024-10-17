@@ -15,6 +15,7 @@ const admin = require("./admin.js");
 const stripeRoutes = require("./stripeRoutes.js");
 const twilio = require("./twilio.js");
 const stats = require("./stats.js");
+const mail_service = require("./mail_service.js");
 
 const corsConfig = {
   origin: true,
@@ -43,6 +44,7 @@ app.use("/", admin);
 app.use("/", stripeRoutes);
 app.use("/", twilio);
 app.use("/", stats);
+app.use("/", mail_service);
 
 app.listen(5001, () => {
   console.log("Server is running on port 5001");
