@@ -191,9 +191,6 @@ router.get("/orders", async (req, res) => {
     );
 
     // Check if any rows were returned
-    if (deliveries.rows.length === 0) {
-      return res.status(404).json({ message: "No orders found for delivery" });
-    }
 
     res.status(200).json(deliveries.rows);
   } catch (error) {
