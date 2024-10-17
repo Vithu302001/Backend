@@ -67,7 +67,7 @@ router.post("/send-confirmation", cors(corsOptions), async (req, res) => {
       service: "gmail",
       auth: {
         user: "agrosl.marketplace@gmail.com", // Your email
-        pass: "ygzy moso kwuh japx", // Your app-specific password
+        pass: "ygzymosokwuhjapx", // Your app-specific password
       },
     });
 
