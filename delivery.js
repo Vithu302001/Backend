@@ -44,7 +44,7 @@ router.get("/deliveries-orderID/:orderId", async (req, res) => {
 });
 
 router.get("/deliveries-buyerId/:buyerId", async (req, res) => {
-  const { buyerId } = req.params; 
+  const { buyerId } = req.params;
 
   try {
     const result = await pool.query(
@@ -99,9 +99,15 @@ router.post("/deliveries", async (req, res) => {
 
     // Insert the new delivery record
     await pool.query(
-      `INSERT INTO delivery (delivery_id, order_id, delivery_rider_id, is_delivered_to_buyer) 
-       VALUES ($1, $2, $3, $4)`,
-      [newDeliveryId, order_id, delivery_rider_id, is_delivered_to_buyer]
+      `INSERT INTO delivery (delivery_id, order_id, delivery_rider_id, is_delivered_to_buyer,delivered_to_sc) 
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        newDeliveryId,
+        order_id,
+        delivery_rider_id,
+        is_delivered_to_buyer,
+        delivered_to_sc,
+      ]
     );
 
     res.status(201).json({
