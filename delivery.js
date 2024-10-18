@@ -65,7 +65,12 @@ router.get("/deliveries-buyerId/:buyerId", async (req, res) => {
 
 router.post("/deliveries", async (req, res) => {
   const { deliveryData } = req.body;
-  const { order_id, delivery_rider_id, is_delivered_to_buyer } = deliveryData;
+  const {
+    order_id,
+    delivery_rider_id,
+    is_delivered_to_buyer,
+    delivered_to_sc,
+  } = deliveryData;
   if (!order_id || !delivery_rider_id) {
     return res.status(400).json({
       error: "Missing required fields: order_id and delivery_rider_id",
@@ -99,9 +104,15 @@ router.post("/deliveries", async (req, res) => {
 
     // Insert the new delivery record
     await pool.query(
-      `INSERT INTO delivery (delivery_id, order_id, delivery_rider_id, is_delivered_to_buyer) 
-       VALUES ($1, $2, $3, $4)`,
-      [newDeliveryId, order_id, delivery_rider_id, is_delivered_to_buyer]
+      `INSERT INTO delivery (delivery_id, order_id, delivery_rider_id, is_delivered_to_buyer,delivered_to_sc) 
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        newDeliveryId,
+        order_id,
+        delivery_rider_id,
+        is_delivered_to_buyer,
+        delivered_to_sc,
+      ]
     );
 
     res.status(201).json({
@@ -118,17 +129,18 @@ router.post("/deliveries", async (req, res) => {
 
 router.put("/delivery-status/:deliveryId", async (req, res) => {
   const { deliveryId } = req.params;
-  const { delivery_status } = req.body;
+  const { delivery_status, delivered_to_dc } = req.body;
 
   try {
     await pool.query(
       `
       UPDATE delivery
       SET delivery_status = $1::delivery_status_enum, 
-      is_delivered_to_buyer = CASE WHEN $1 = 'Delivered' THEN true ELSE false END
+      is_delivered_to_buyer = CASE WHEN $1 = 'Delivered' THEN true ELSE false END,
+      delivered_to_dc = $3
       WHERE delivery_id = $2
     `,
-      [delivery_status, deliveryId]
+      [delivery_status, deliveryId, delivered_to_dc]
     );
 
     res.json({ message: "Delivery status updated successfully" });
