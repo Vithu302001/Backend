@@ -129,17 +129,18 @@ router.post("/deliveries", async (req, res) => {
 
 router.put("/delivery-status/:deliveryId", async (req, res) => {
   const { deliveryId } = req.params;
-  const { delivery_status } = req.body;
+  const { delivery_status, delivered_to_dc } = req.body;
 
   try {
     await pool.query(
       `
       UPDATE delivery
       SET delivery_status = $1::delivery_status_enum, 
-      is_delivered_to_buyer = CASE WHEN $1 = 'Delivered' THEN true ELSE false END
+      is_delivered_to_buyer = CASE WHEN $1 = 'Delivered' THEN true ELSE false END,
+      delivered_to_dc = $3
       WHERE delivery_id = $2
     `,
-      [delivery_status, deliveryId]
+      [delivery_status, deliveryId, delivered_to_dc]
     );
 
     res.json({ message: "Delivery status updated successfully" });
