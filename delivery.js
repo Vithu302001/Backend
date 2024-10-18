@@ -65,7 +65,12 @@ router.get("/deliveries-buyerId/:buyerId", async (req, res) => {
 
 router.post("/deliveries", async (req, res) => {
   const { deliveryData } = req.body;
-  const { order_id, delivery_rider_id, is_delivered_to_buyer } = deliveryData;
+  const {
+    order_id,
+    delivery_rider_id,
+    is_delivered_to_buyer,
+    delivered_to_sc,
+  } = deliveryData;
   if (!order_id || !delivery_rider_id) {
     return res.status(400).json({
       error: "Missing required fields: order_id and delivery_rider_id",
