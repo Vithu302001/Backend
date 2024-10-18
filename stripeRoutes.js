@@ -114,8 +114,8 @@ router.post("/create-connected-account", async (req, res) => {
     // Generate the account onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "http://localhost:5173/Sign_Up_Seller",
-      return_url: "http://localhost:5173/Success",
+      refresh_url: "http://agro-sl.vercel.app/Sign_Up_Seller",
+      return_url: "http://agro-sl.vercel.app/Success",
       type: "account_onboarding",
     });
 
