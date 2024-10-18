@@ -23,6 +23,26 @@ router.get("/deliveries/:riderId", async (req, res) => {
   }
 });
 
+router.get("/deliveries/:orderId", async (req, res) => {
+  const { orderId } = req.params; // Extract riderId from URL params
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM delivery_with_order_details WHERE order_id = $1 and is_delivered_to_buyer=$2",
+      [orderId, false]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(200).json([]);
+    } else {
+      return res.status(200).json(result.rows);
+    }
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send("Server error");
+  }
+});
+
 router.post("/deliveries", async (req, res) => {
   const { deliveryData } = req.body;
   const { order_id, delivery_rider_id, is_delivered_to_buyer } = deliveryData;
