@@ -12,7 +12,6 @@ router.post("/delivery_riders", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Insert new seller into the database
     const result = await pool.query(
       `INSERT INTO "delivery_rider" (
             "user_id", "NIC"

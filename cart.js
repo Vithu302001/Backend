@@ -39,7 +39,6 @@ router.get("/cart/:userID", async (req, res) => {
   }
 });
 
-// Modify /cart/:userID route to include seller's name
 router.get("/cartWithSellerName/:userID", async (req, res) => {
   const userID = req.params.userID;
   try {

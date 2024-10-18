@@ -115,9 +115,6 @@ router.get("/sales_stats", async (req, res) => {
     let mostSoldItem = null;
     let mostSoldCategory = null;
 
-    // Log the result of most sold item query for debugging
-    console.log("mostSoldItemResult:", mostSoldItemResult.rows);
-
     if (mostSoldItemResult.rows.length > 0) {
       const mostSoldItemId = mostSoldItemResult.rows[0].item_id;
 
@@ -129,16 +126,11 @@ router.get("/sales_stats", async (req, res) => {
         [mostSoldItemId]
       );
 
-      // Log the result of item details query for debugging
-      console.log("itemDetailsResult:", itemDetailsResult.rows);
-
       if (itemDetailsResult.rows.length > 0) {
         mostSoldItem = itemDetailsResult.rows[0].item_name;
         mostSoldCategory = itemDetailsResult.rows[0].category;
       }
     }
-
-    // If no result was found, log to check
     if (!mostSoldItem || !mostSoldCategory) {
       console.log("No data found for most sold item or category.");
     }
@@ -147,8 +139,8 @@ router.get("/sales_stats", async (req, res) => {
     return res.status(200).json({
       orderCount,
       complaintCount,
-      mostSoldItem: mostSoldItem || "No data", // Fallback to "No data" if null
-      mostSoldCategory: mostSoldCategory || "No data", // Fallback to "No data" if null
+      mostSoldItem: mostSoldItem || "No data",
+      mostSoldCategory: mostSoldCategory || "No data",
     });
   } catch (e) {
     console.error("Error occurred:", e);

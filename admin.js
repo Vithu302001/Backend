@@ -7,7 +7,7 @@ router.post("/admins", async (req, res) => {
   const { user_id, email } = req.body;
 
   try {
-    // Insert new user into the database
+    // Insert new admin into the database
     const result = await pool.query(
       `INSERT INTO admin (
             user_id,email

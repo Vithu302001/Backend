@@ -66,14 +66,9 @@ router.get("/seller/stats/:seller_id", async (req, res) => {
     // Get connection from the pool
     const client = await pool.connect();
 
-    // SQL Queries to fetch counts from orders, deliveries, and items tables
     const orderCountQuery = 'SELECT COUNT(*) FROM "order" WHERE seller_id = $1';
-
     const itemCountQuery = "SELECT COUNT(*) FROM item WHERE seller_id = $1";
-
-    // Execute the queries
     const orderCountResult = await client.query(orderCountQuery, [seller_id]);
-
     const itemCountResult = await client.query(itemCountQuery, [seller_id]);
 
     // Parse the results

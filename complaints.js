@@ -121,7 +121,7 @@ router.post("/api/complaints", async (req, res) => {
     req.body;
 
   try {
-    // Generate a new complaint_id (auto-increment, e.g., C0001)
+    // Generate a new complaint_id
     const result = await pool.query("SELECT COUNT(*) FROM complaint");
     const complaintCount = parseInt(result.rows[0].count) + 1;
     const complaint_id = `C${complaintCount.toString().padStart(4, "0")}`;

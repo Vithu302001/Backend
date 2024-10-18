@@ -17,35 +17,6 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 
-// Generate token for chat access
-// router.post("/token", async (req, res) => {
-//   const { identity, friendlyName } = req.body;
-
-//   const token = new twilio.jwt.AccessToken(accountSid, apiKey, apiSecret, {
-//     identity: identity,
-//   });
-
-//   const chatGrant = new twilio.jwt.AccessToken.ChatGrant({
-//     serviceSid: chatServiceSid,
-//   });
-
-//   token.addGrant(chatGrant);
-
-//   try {
-//     // Create or update the user with the friendly name in Twilio Chat
-//     await client.conversations
-//       .services(chatServiceSid)
-//       .users(identity)
-//       .update({ friendlyName: friendlyName });
-
-//     // Send the token back to the client
-//     res.send({ token: token.toJwt() });
-//   } catch (error) {
-//     console.error("Error creating/updating user:", error);
-//     res.status(500).send("Error creating/updating user");
-//   }
-// });
-
 router.post("/token", async (req, res) => {
   const { identity, friendlyName } = req.body;
 
@@ -102,7 +73,7 @@ router.post("/conversation", async (req, res) => {
   const client = twilio(accountSid, authToken);
 
   try {
-    // Check if conversation between users already exists (you may want to store conversation SIDs in your database)
+    // Check if conversation between users already exists
     let conversation = await client.conversations.v1.conversations
       .list({
         limit: 20,

@@ -128,7 +128,7 @@ router.post("/api/items", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Generate item_id in the format ITxxxx
+    // Generate item_id
     const result = await pool.query("SELECT COUNT(*) FROM item");
     const itemCount = parseInt(result.rows[0].count) + 1;
     const item_id = `i${String(itemCount).padStart(4, "0")}`;
