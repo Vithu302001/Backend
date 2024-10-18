@@ -43,6 +43,26 @@ router.get("/deliveries/:orderId", async (req, res) => {
   }
 });
 
+router.get("/deliveries/:buyerId", async (req, res) => {
+  const { buyerId } = req.params; // Extract riderId from URL params
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM delivery_with_order_details WHERE buyer_id = $1",
+      [buyerId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(200).json([]);
+    } else {
+      return res.status(200).json(result.rows);
+    }
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send("Server error");
+  }
+});
+
 router.post("/deliveries", async (req, res) => {
   const { deliveryData } = req.body;
   const { order_id, delivery_rider_id, is_delivered_to_buyer } = deliveryData;
