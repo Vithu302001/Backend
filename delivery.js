@@ -23,7 +23,7 @@ router.get("/deliveries/:riderId", async (req, res) => {
   }
 });
 
-router.get("/deliveries/:orderId", async (req, res) => {
+router.get("/deliveries-orderID/:orderId", async (req, res) => {
   const { orderId } = req.params; // Extract riderId from URL params
 
   try {
@@ -43,8 +43,8 @@ router.get("/deliveries/:orderId", async (req, res) => {
   }
 });
 
-router.get("/deliveries/:buyerId", async (req, res) => {
-  const { buyerId } = req.params; // Extract riderId from URL params
+router.get("/deliveries-buyerId/:buyerId", async (req, res) => {
+  const { buyerId } = req.params; 
 
   try {
     const result = await pool.query(
